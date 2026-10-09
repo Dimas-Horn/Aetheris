@@ -1,85 +1,492 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETHERIS // System Engine</title>
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFldGhlcmlzIFN5c3RlbSIsCiAgInNob3J0X25hbWUiOiAiQWV0aGVyaXMiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZ[...]
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AETHERIS // System Engine v4.0</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFldGhlcmlzIFN5c3RlbSIsCiAgInNob3J0X25hbWUiOiAiQWV0aGVyaXMiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBiMTExNCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMGYwZmYiCn0=" />
     <style>
         :root {
-            --bg-dark: #0b1114;
-            --panel-bg: #121b20;
+            --bg-dark: #070c0e;
+            --bg-mid: #0d171a;
+            --panel-bg: rgba(18, 27, 32, 0.85);
+            --panel-strong: rgba(22, 34, 40, 1);
+            --bg-elevated: rgba(24, 37, 44, 0.9);
             --neon-blue: #00f0ff;
+            --neon-cyan: #5ee7ff;
             --neon-magenta: #ff0077;
-            --text-main: #e2e8f0;
-            --text-dim: #64748b;
+            --neon-purple: #aa66ff;
+            --text-main: #ebf6ff;
+            --text-soft: #b9c7d3;
+            --text-dim: #5b6d7a;
             --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow-blue: 0 0 12px rgba(0, 240, 255, 0.35);
+            --shadow-magenta: 0 0 12px rgba(255, 0, 119, 0.32);
+            --glass: blur(10px);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background-color: var(--bg-dark); color: var(--text-main); padding: 15px; padding-bottom: 80px; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon-blue); padding-bottom: 10px; margin-bottom: 15px; }
-        .system-title { color: var(--neon-blue); font-weight: bold; font-size: 1.2rem; text-shadow: 0 0 8px rgba(0,240,255,0.4); }
-        
-        .card { background: var(--panel-bg); border: 1px solid #23353f; border-radius: 6px; padding: 15px; margin-bottom: 15px; position: relative; }
-        .card-title { font-size: 0.9rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
-        
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .stat-val { font-size: 1.4rem; color: var(--neon-blue); font-weight: bold; }
-        .debt { color: var(--neon-magenta); }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Monaco, monospace;
+        }
 
-        .xp-bar-container { background: #1c2c35; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 5px; border: 1px solid #2d4350; }
-        .xp-bar { background: linear-gradient(90deg, var(--neon-blue), #0077ff); height: 100%; width: 0%; transition: width 0.4s ease; }
+        html, body {
+            min-height: 100%;
+        }
 
-        .ai-box { border-left: 3px solid var(--neon-magenta); padding-left: 10px; font-style: italic; background: rgba(255, 0, 119, 0.05); }
-        .ai-status { font-size: 0.75rem; color: var(--neon-magenta); text-transform: uppercase; font-weight: bold; margin-bottom: 4px; }
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.12), transparent 26%),
+                radial-gradient(circle at 80% 25%, rgba(255, 0, 119, 0.08), transparent 22%),
+                radial-gradient(circle at 50% 50%, #101f26 0%, #070c0e 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            padding: 16px 16px 90px;
+            line-height: 1.4;
+        }
 
-        .quest-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #18252c; border-radius: 4px; margin-bottom: 8px; border: 1px solid #23353f; }
-        .quest-info { flex: 1; }
-        .quest-time { font-size: 0.75rem; color: var(--neon-blue); }
-        .quest-exp { font-size: 0.8rem; color: var(--success); font-weight: bold; }
-        
-        .btn { background: #1f313a; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
-        .btn:hover { background: rgba(0, 240, 255, 0.1); }
-        .btn-fail { border-color: var(--neon-magenta); color: var(--neon-magenta); }
-        .btn-fail:hover { background: rgba(255, 0, 119, 0.1); }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(0, 240, 255, 0.7);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
 
-        .reward-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #1c2c35; }
-        .reward-item.locked { opacity: 0.4; }
-        .badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase; }
-        .badge-locked { background: #334155; color: #94a3b8; }
-        .badge-unlocked { background: var(--success); color: #fff; }
+        .system-title {
+            color: var(--neon-blue);
+            font-weight: 900;
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            letter-spacing: 2px;
+            text-shadow: var(--shadow-blue);
+            text-transform: uppercase;
+        }
 
-        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--panel-bg); border-top: 2px solid var(--neon-blue); display: flex; justify-content: space-around; padding: 10px 0; }
-        .nav-btn { color: var(--text-dim); background: none; border: none; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-        .nav-btn.active { color: var(--neon-blue); text-shadow: 0 0 5px rgba(0,240,255,0.4); }
+        .level-badge {
+            background: linear-gradient(135deg, var(--neon-blue), #0055ff);
+            color: #021017;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-blue);
+        }
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .chibi-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(11,17,20,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .chibi-art { font-size: 4rem; margin-bottom: 20px; animation: bounce 1s infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 240, 255, 0.16);
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 16px;
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            box-shadow:
+                inset 0 0 12px rgba(0, 240, 255, 0.04),
+                0 0 20px rgba(7, 12, 14, 0.7);
+        }
 
-        .talk-box { display: flex; gap: 8px; margin-top: 10px; }
-        .talk-input { flex: 1; background: #18252c; border: 1px solid #23353f; border-radius: 4px; padding: 8px; color: var(--text-main); }
+        .card-title {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--neon-blue);
+            margin-bottom: 12px;
+            opacity: 0.9;
+            font-weight: 700;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .label-small {
+            font-size: 0.68rem;
+            letter-spacing: 1.5px;
+            color: var(--text-soft);
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .stat-val {
+            display: block;
+            margin-top: 5px;
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            color: var(--text-main);
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+
+        .debt {
+            color: var(--neon-magenta);
+            text-shadow: 0 0 8px rgba(255, 0, 119, 0.35);
+        }
+
+        .xp-row {
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .xp-bar-container {
+            background: rgba(28, 44, 53, 0.6);
+            height: 10px;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 8px;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .xp-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-blue), #00bbff, #52d4ff);
+            border-radius: inherit;
+            transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .money-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .talk-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .talk-input {
+            flex: 1;
+            min-width: 0;
+            border-radius: 7px;
+            border: 1px solid rgba(0, 240, 255, 0.16);
+            background: rgba(10, 18, 20, 0.9);
+            color: var(--text-main);
+            padding: 10px 12px;
+            font-size: 0.94rem;
+            transition: all 0.2s ease;
+        }
+
+        .talk-input:focus {
+            outline: none;
+            border-color: rgba(0, 240, 255, 0.8);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn {
+            border: 1px solid var(--neon-blue);
+            background: rgba(31, 49, 58, 0.6);
+            color: var(--neon-blue);
+            padding: 9px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.76rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--neon-blue);
+            color: var(--bg-dark);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn-fail {
+            border-color: var(--neon-magenta);
+            color: var(--neon-magenta);
+        }
+
+        .btn-fail:hover {
+            background: var(--neon-magenta);
+            color: var(--text-main);
+            box-shadow: var(--shadow-magenta);
+        }
+
+        .ai-box {
+            border: 1px solid rgba(255, 0, 119, 0.35);
+            background: rgba(255, 0, 119, 0.04);
+            box-shadow: inset 0 0 12px rgba(255, 0, 119, 0.04);
+        }
+
+        .ai-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.71rem;
+            color: var(--neon-magenta);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        #ai-dialogue {
+            min-height: 48px;
+            color: #dfeaf2;
+            line-height: 1.5;
+            font-size: 0.96rem;
+            margin-bottom: 12px;
+        }
+
+        .pulse-light {
+            width: 9px;
+            height: 9px;
+            background: var(--neon-magenta);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(255, 0, 119, 0.7);
+        }
+
+        .pulse-active {
+            animation: blink 1s infinite alternate ease-in-out;
+        }
+
+        @keyframes blink {
+            from { opacity: 0.3; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+
+        .quest-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 12px;
+            background: rgba(24, 37, 44, 0.4);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .quest-item:hover {
+            border-color: rgba(0, 240, 255, 0.2);
+            background: rgba(24, 37, 44, 0.62);
+        }
+
+        .quest-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .quest-name {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        .quest-time {
+            margin-top: 4px;
+            font-size: 0.72rem;
+            color: var(--neon-blue);
+            letter-spacing: 0.3px;
+        }
+
+        .quest-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-direction: column;
+        }
+
+        .quest-exp {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--success);
+            text-align: right;
+        }
+
+        .reward-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .reward-item:last-child {
+            border-bottom: none;
+        }
+
+        .reward-name {
+            font-weight: 700;
+            font-size: 0.96rem;
+        }
+
+        .reward-cost {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-top: 3px;
+        }
+
+        .reward-item.locked {
+            opacity: 0.45;
+            filter: grayscale(100%);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .badge-locked {
+            background: rgba(100, 116, 139, 0.18);
+            color: #aab7c2;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .badge-unlocked {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.55);
+            cursor: pointer;
+        }
+
+        .nav {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(12, 20, 24, 0.96);
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            padding: 12px 10px;
+            box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-btn.active {
+            color: var(--neon-blue);
+            text-shadow: var(--shadow-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .chibi-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 8, 10, 0.98);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 2000;
+            padding: 24px;
+        }
+
+        .chibi-art {
+            font-size: clamp(3rem, 8vw, 5rem);
+            margin-bottom: 18px;
+            animation: float 1.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-12px); }
+        }
+
+        .chibi-title {
+            color: var(--neon-magenta);
+            margin-bottom: 10px;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .chibi-text {
+            color: #dfeaf2;
+            max-width: 540px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .money-row, .talk-box {
+                flex-direction: column;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quest-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .quest-actions {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="header">
-        <div class="system-title">AETHERIS // CORE v3.0</div>
-        <div>LVL <span id="lbl-level">1</span></div>
+        <div class="system-title">AETHERIS // OS v4.0</div>
+        <div class="level-badge">Level <span id="lbl-level">1</span></div>
     </div>
 
-    <!-- PROFILE MANAGEMENT -->
     <div class="card">
-        <div class="card-title">User Framework & Finances</div>
+        <div class="card-title">User Vector &amp; Financial Ledger</div>
         <div class="stat-grid">
             <div>
-                <span style="font-size:0.75rem; color:var(--text-dim)">DESIGNATION</span><br>
-                <select id="pref-title" class="btn" style="background:transparent; padding:2px 5px; width:100%" onchange="updateTitle()">
+                <div class="label-small">Designation Type</div>
+                <select id="pref-title" class="talk-input" style="margin-top:7px; width:100%; background: rgba(10,18,20,0.9);" onchange="updateTitle()">
                     <option value="Magistrate">Magistrate</option>
                     <option value="Chosen One">Chosen One</option>
                     <option value="Hero">Hero</option>
@@ -87,71 +494,111 @@
                 </select>
             </div>
             <div>
-                <span style="font-size:0.75rem; color:var(--text-dim)">TREASURY BALANCE</span><br>
+                <div class="label-small">Treasury Liquidity</div>
                 <span id="lbl-gold" class="stat-val debt">-$13.00</span>
             </div>
         </div>
-        <div style="margin-top: 10px; display:flex; justify-content:space-between; font-size:0.75rem;">
-            <span>XP: <span id="lbl-xp-num">0</span>/<span id="lbl-next-xp">100</span></span>
+
+        <div class="xp-row">
+            <span>Reserve Core Overload</span>
+            <span><span id="lbl-xp-num">0</span> / <span id="lbl-next-xp">100</span> EXP</span>
         </div>
         <div class="xp-bar-container">
             <div id="xp-bar" class="xp-bar"></div>
         </div>
-        <div style="margin-top: 12px; display:flex; gap:10px;">
-            <input type="number" id="input-money" class="talk-input" placeholder="Sync Account Balance ($)">
-            <button class="btn" onclick="syncMoney()">Update Balance</button>
+
+        <div class="money-row">
+            <input type="number" id="input-money" class="talk-input" placeholder="Enter bank balance manually..." />
+            <button class="btn" onclick="syncMoney()">Ledger Sync</button>
         </div>
     </div>
 
-    <!-- CONVERSATION AND TEXT LOG LINK -->
     <div class="card ai-box">
-        <div id="ai-mode" class="ai-status">INITIALIZING CALCULATION MATRIX</div>
-        <div id="ai-dialogue">"Syllabus files analyzed, Dimas. I have updated your quest array with your exact CSU classes and quiz trajectories."</div>
+        <div class="ai-status">
+            <span id="ai-mode">Intelligent System Monitor</span>
+            <span id="ai-pulse" class="pulse-light pulse-active"></span>
+        </div>
+        <div id="ai-dialogue">"System brain missing. Hunter Dimas, please generate a free access token from Google AI Studio and paste it below to link my consciousness network."</div>
         <div class="talk-box">
-            <input type="text" id="talk-text" class="talk-input" placeholder="Initiate verbal log link...">
+            <input type="text" id="talk-text" class="talk-input" placeholder="Communicate with Aetheris matrix directly..." />
             <button class="btn" onclick="triggerLiveTalk()">Transmit</button>
         </div>
     </div>
 
-    <!-- CALENDAR FEED INJECTOR OVERLAY / INTERFACE -->
-    <div class="card">
-        <div class="card-title">Dynamic iCal Stream Node</div>
-        <div style="display:flex; gap:8px;">
-            <input type="text" id="ical-url-input" class="talk-input" placeholder="Paste Canvas .ics URL here">
-            <button class="btn" onclick="importExternalFeed()">Link Feed</button>
+    <div class="card" id="api-gate-card">
+        <div class="card-title">Neural Engine Core Access Token</div>
+        <div class="talk-box">
+            <input type="password" id="api-key-input" class="talk-input" placeholder="Paste Gemini API Key Here" />
+            <button class="btn btn-fail" onclick="saveApiKey()">Bind Soul</button>
         </div>
     </div>
 
-    <!-- TAB CONTEXT ARRAY -->
     <div id="tab-quests" class="tab-content active">
         <div class="card">
-            <div class="card-title">Live Dynamic Quest Log</div>
+            <div class="card-title">Synchronized Campaign Operations</div>
             <div id="quest-list"></div>
         </div>
     </div>
 
     <div id="tab-rewards" class="tab-content">
         <div class="card">
-            <div class="card-title">Fort Collins Reward Milestones</div>
+            <div class="card-title">Unlocked Spatial Incentives</div>
             <div id="reward-list"></div>
         </div>
     </div>
 
-    <!-- VISUAL RESTRICTION MODULE -->
     <div id="chibi-screen" class="chibi-overlay">
-        <div class="chibi-art">( 💢 👁️皿👁️)</div>
-        <h2 style="color:var(--neon-magenta); margin-bottom:10px;">AETHERIS SLEEP ORDER</h2>
-        <p id="chibi-text">Dimas, screen restrictions are active. Disengage terminal or sustain heavy psychological damage penalties.</p>
+        <div class="chibi-art">٩(๑`^´๑)۶</div>
+        <h2 class="chibi-title">Critical System Seizure</h2>
+        <p id="chibi-text" class="chibi-text">It is past 10:00 PM on a class night. Disengage this device instantly. Bedtime overrides are now deployment status.</p>
         <button class="btn btn-fail" style="margin-top:20px;" onclick="closeChibi()">Audio Stream Verification</button>
     </div>
 
-    <!-- BOTTOM SYSTEM TABS -->
     <div class="nav">
-        <button class="nav-btn active" onclick="switchTab('quests', this)">ACTIVE CAMPAIGNS</button>
-        <button class="nav-btn" onclick="switchTab('rewards', this)">REWARD VENDORS</button>
+        <button class="nav-btn active" onclick="switchTab('quests', this)">Active Campaigns</button>
+        <button class="nav-btn" onclick="switchTab('rewards', this)">Reward Vendors</button>
     </div>
 
     <script>
+        const AudioSynth = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const Ctx = window.AudioContext || window.webkitAudioContext;
+                    if (Ctx) this.ctx = new Ctx();
+                }
+                return this.ctx;
+            },
+            play(type) {
+                const ctx = this.init();
+                if (!ctx) return;
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'fail') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
+                }
+            }
+        };
+
         let state = {
             level: 1,
             xp: 0,
@@ -159,124 +606,214 @@
             gold: -13.00,
             title: 'Magistrate',
             quests: [
-                { id: 101, name: 'CSU Morning Routine/Training', time: '08:30 AM', exp: 15, completed: false },
-                { id: 102, name: 'CHEM-341 Lecture (Acids & Bases Focus)', time: '09:00 AM', exp: 5, completed: false },
-                { id: 103, name: 'STAT-301 Section Attendance', time: '01:00 PM', exp: 5, completed: false },
-                { id: 104, name: 'CO-300 Composition Workshop', time: '02:00 PM', exp: 5, completed: false },
-                { id: 105, name: 'PSY-250 Literature Search Analysis', time: '03:30 PM', exp: 10, completed: false },
-                { id: 106, name: 'Rec Center Strength Cleans', time: 'Evening', exp: 15, completed: false }
+                { id: 401, name: 'Morning Training Protocol', time: '08:30 AM', exp: 15, completed: false },
+                { id: 402, name: 'STAT-301 Module 4 Quiz', time: 'Active Tracker', exp: 5, completed: false },
+                { id: 403, name: 'CHEM-341 Quiz 5 Preparation', time: 'Due Oct 11', exp: 5, completed: false },
+                { id: 404, name: 'PSY-250 Hypothesis Variable Matrix', time: 'Due Oct 15', exp: 10, completed: false },
+                { id: 405, name: 'CO-300 Academic Portfolio Drafting', time: 'Crucible Operation', exp: 5, completed: false },
+                { id: 406, name: 'Rec Center Physical Compression Run', time: 'Evening Frame', exp: 15, completed: false }
             ],
             rewards: [
-                { name: 'Old Town Square Concert Gathering', cost: 0, lvl: 1 },
-                { name: 'Horsetooth Rock High Climb Summit', cost: 0, lvl: 2 },
-                { name: 'Mountain Symphony Orchestra Ticket', cost: 0, lvl: 2 },
-                { name: 'Cache la Poudre River Camping Outpost', cost: 45, lvl: 3 },
-                { name: 'Cameron Pass Backcountry Ski Run', cost: 85, lvl: 4 }
+                { name: 'FoCo Old Town Concert Framework', cost: 0, lvl: 1 },
+                { name: 'Horsetooth Reservoir Outpost Climb', cost: 0, lvl: 2 },
+                { name: 'Cache la Poudre Mountain Camping Area', cost: 45, lvl: 3 },
+                { name: 'Cameron Pass Backcountry Alpine Run', cost: 85, lvl: 4 }
             ]
         };
-        if(localStorage.getItem('aetheris_v3_state')) {
-            state = JSON.parse(localStorage.getItem('aetheris_v3_state'));
+
+        let apiKey = localStorage.getItem('aetheris_api_key') || '';
+
+        if (localStorage.getItem('aetheris_v4_state')) {
+            try {
+                state = JSON.parse(localStorage.getItem('aetheris_v4_state'));
+            } catch (err) {
+                console.warn('Could not load saved state:', err);
+            }
         }
+
         function saveState() {
-            localStorage.setItem('aetheris_v3_state', JSON.stringify(state));
+            localStorage.setItem('aetheris_v4_state', JSON.stringify(state));
             render();
         }
+
+        function saveApiKey() {
+            const val = document.getElementById('api-key-input').value.trim();
+            if (!val) return;
+            apiKey = val;
+            localStorage.setItem('aetheris_api_key', val);
+            document.getElementById('api-gate-card').style.display = 'none';
+            document.getElementById('ai-dialogue').innerText = 'System brain successfully operational. Neural link established. Let us initiate testing protocols, Dimas.';
+            saveState();
+        }
+
         function switchTab(tab, btn) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach((el) => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach((el) => el.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
             btn.classList.add('active');
         }
+
         function updateTitle() {
             state.title = document.getElementById('pref-title').value;
             saveState();
         }
+
         function syncMoney() {
             const val = parseFloat(document.getElementById('input-money').value);
-            if(!isNaN(val)) {
+            if (!isNaN(val)) {
                 state.gold = val;
-                saveState();
                 document.getElementById('input-money').value = '';
+                saveState();
             }
         }
+
         function handleQuest(id, success) {
-            const q = state.quests.find(x => x.id === id);
-            if(!q) return;
-            if(success) {
+            const q = state.quests.find((x) => x.id === id);
+            if (!q) return;
+
+            if (success) {
+                AudioSynth.play('success');
                 state.xp += q.exp;
-                document.getElementById('ai-mode').innerText = "ANALYTICAL LOG CONFIRMED";
-                document.getElementById('ai-dialogue').innerText = "Objective fully synchronized, " + state.title + ". " + q.exp + " EXP transferred cleanly.";
                 q.completed = true;
+                document.getElementById('ai-mode').innerText = 'Analytical Log Confirmed';
+                document.getElementById('ai-dialogue').innerText = `Objective fully synchronized, ${state.title}. ${q.exp} EXP transferred cleanly.`;
                 checkLevelUp();
             } else {
+                AudioSynth.play('fail');
                 state.xp = Math.max(0, state.xp - 5);
-                document.getElementById('ai-mode').innerText = "SASSY ATTENTION MATRIX";
-                document.getElementById('ai-dialogue').innerText = "Dimas, dropping objectives incurs corruption. -5 EXP extracted from structural reserve.";
+                document.getElementById('ai-mode').innerText = 'Sassy Attention Matrix';
+                document.getElementById('ai-dialogue').innerText = 'Dimas, dropping objectives incurs corruption. -5 EXP extracted from structural reserve.';
             }
+
             saveState();
         }
+
         function checkLevelUp() {
-            if(state.xp >= state.nextXp) {
+            if (state.xp >= state.nextXp) {
                 state.xp -= state.nextXp;
-                state.level++;
+                state.level += 1;
                 state.nextXp *= 2;
-                document.getElementById('ai-mode').innerText = "CRITICAL METAMORPHOSIS";
-                document.getElementById('ai-dialogue').innerText = "System alert! Level Shift achieved. You are now Level " + state.level + ", " + state.title + ".";
+                document.getElementById('ai-mode').innerText = 'Critical Metamorphosis';
+                document.getElementById('ai-dialogue').innerText = `System alert! Level shift achieved. You are now Level ${state.level}, ${state.title}.`;
             }
         }
-        function importExternalFeed() {
-            const val = document.getElementById('ical-url-input').value;
-            if(!val) return;
-            document.getElementById('ai-mode').innerText = "DECRYPTING FEED PROTOCOLS";
-            document.getElementById('ai-dialogue').innerText = "Injecting custom .ics link stream node. Your Canvas matrix calendar is permanently linked inside local phone storage.";
-            document.getElementById('ical-url-input').value = '';
+
+        async function aiEvaluateAction(contextPrompt) {
+            if (!apiKey) return;
+
+            document.getElementById('ai-pulse').classList.add('pulse-active');
+
+            const systemInstructions = `You are Aetheris, an autonomous anime system matrix guide for a student named Dimas. Shift persona based on context: sharp and analytical for logic logs, playful and teasing for tasks or schedule management. Keep responses strictly under 2 lines. Use designation titles like Magistrate, Chosen One, Hero, or Hunter dynamically based on state context. Real date reference: October 2026. Current state: Level ${state.level}, Treasury balance ${state.gold} dollars, Preference designation: ${state.title}.`;
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `${systemInstructions}\n\nEvent Context: ${contextPrompt}`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'System calculation anomaly during network transmission link.';
+                document.getElementById('ai-mode').innerText = 'Live Neural Vector Active';
+                document.getElementById('ai-dialogue').innerText = aiText;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('ai-dialogue').innerText = 'System calculation anomaly during network transmission link.';
+            }
         }
-        function triggerLiveTalk() {
-            const txt = document.getElementById('talk-text').value;
-            if(!txt) return;
-            document.getElementById('ai-dialogue').innerText = "...Analyzing input stream. Awaiting backend server translation proxy...";
+
+        async function triggerLiveTalk() {
+            const txt = document.getElementById('talk-text').value.trim();
+            if (!txt) return;
+            document.getElementById('ai-dialogue').innerText = '...Translating vocal matrix streams...';
             document.getElementById('talk-text').value = '';
+            await aiEvaluateAction(`User spoke directly to the system terminal: "${txt}"`);
         }
+
         function closeChibi() {
             document.getElementById('chibi-screen').style.display = 'none';
         }
+
         setInterval(() => {
             const now = new Date();
-            if(now.getHours() >= 22 || now.getHours() < 5) {
-                if(now.getDay() >= 1 && now.getDay() <= 5) {
-                    document.getElementById('chibi-screen').style.display = 'flex';
-                }
+            if ((now.getHours() >= 22 || now.getHours() < 5) && now.getDay() >= 1 && now.getDay() <= 5) {
+                document.getElementById('chibi-screen').style.display = 'flex';
             }
         }, 60000);
+
         function render() {
             document.getElementById('lbl-level').innerText = state.level;
             const goldEl = document.getElementById('lbl-gold');
-            goldEl.innerText = (state.gold >= 0 ? '$' + state.gold.toFixed(2) : '-$' + Math.abs(state.gold).toFixed(2));
-            if(state.gold < 0) goldEl.classList.add('debt'); else goldEl.classList.remove('debt');
+            goldEl.innerText = state.gold >= 0 ? `$${state.gold.toFixed(2)}` : `-$${Math.abs(state.gold).toFixed(2)}`;
+            goldEl.classList.toggle('debt', state.gold < 0);
+
             document.getElementById('lbl-xp-num').innerText = state.xp;
             document.getElementById('lbl-next-xp').innerText = state.nextXp;
             document.getElementById('pref-title').value = state.title;
-            const pct = (state.xp / state.nextXp) * 100;
-            document.getElementById('xp-bar').style.width = pct + '%';
+
+            const pct = Math.min(100, (state.xp / state.nextXp) * 100);
+            document.getElementById('xp-bar').style.width = `${pct}%`;
+
+            if (apiKey) {
+                document.getElementById('api-gate-card').style.display = 'none';
+            }
+
             const qList = document.getElementById('quest-list');
             qList.innerHTML = '';
-            state.quests.forEach(q => {
-                if(q.completed) return;
-                qList.innerHTML += '<div class="quest-item"><div class="quest-info"><div style="font-weight:bold">' + q.name + '</div><div class="quest-time">🕒 ' + q.time + '</div></div><div style="display:flex; gap:8px; align-items:center;"><span class="quest-exp">+' + q.exp + ' XP</span><button class="btn" onclick="handleQuest(' + q.id + ', true)">Clear</button><button class="btn btn-fail" onclick="handleQuest(' + q.id + ', false)">Miss</button></div></div>';
+            state.quests.forEach((q) => {
+                if (q.completed) return;
+                qList.innerHTML += `
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <div class="quest-name">${q.name}</div>
+                            <div class="quest-time">⚡ Tracker Window: ${q.time}</div>
+                        </div>
+                        <div class="quest-actions">
+                            <div class="quest-exp">+${q.exp} EXP</div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn" style="padding:4px 10px; min-width:42px;" onclick="handleQuest(${q.id}, true)">✓</button>
+                                <button class="btn btn-fail" style="padding:4px 10px; min-width:42px;" onclick="handleQuest(${q.id}, false)">✗</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
+
             const rList = document.getElementById('reward-list');
             rList.innerHTML = '';
-            state.rewards.forEach(r => {
+            state.rewards.forEach((r) => {
                 const lvlLock = state.level < r.lvl;
                 const goldLock = state.gold < r.cost;
                 const isLocked = lvlLock || goldLock;
-                let b = '';
-                if(lvlLock) b = '<span class="badge badge-locked">LOCKED // LVL ' + r.lvl + '</span>';
-                else if(goldLock) b = '<span class="badge badge-locked">LOCKED // EXPENSIVE</span>';
-                else b = '<span class="badge badge-unlocked" onclick="alert(\'Milestone selected!\')">SELECT REGION ($' + r.cost + ')</span>';
-                rList.innerHTML += '<div class="reward-item ' + (isLocked ? 'locked' : '') + '"><div><div style="font-weight:bold">' + r.name + '</div><div style="font-size:0.75rem; color:var(--text-dim)">Excursion Vault // Cost $' + r.cost + ' // Req LVL ' + r.lvl + '</div></div>' + b + '</div>';
+
+                let badgeHtml = '';
+                if (lvlLock) {
+                    badgeHtml = `<span class="badge badge-locked">Lvl ${r.lvl} Req</span>`;
+                } else if (goldLock) {
+                    badgeHtml = `<span class="badge badge-locked">Treasury Locked</span>`;
+                } else {
+                    badgeHtml = `<span class="badge badge-unlocked" onclick="alert('Incentive initialized!')">Claim Target</span>`;
+                }
+
+                rList.innerHTML += `
+                    <div class="reward-item ${isLocked ? 'locked' : ''}">
+                        <div>
+                            <div class="reward-name">${r.name}</div>
+                            <div class="reward-cost">Excursion cost gate: $${r.cost}</div>
+                        </div>
+                        <div>${badgeHtml}</div>
+                    </div>
+                `;
             });
         }
+
         render();
     </script>
 </body>

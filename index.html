@@ -1,820 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AETHERIS // System Engine v4.0</title>
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFldGhlcmlzIFN5c3RlbSIsCiAgInNob3J0X25hbWUiOiAiQWV0aGVyaXMiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBiMTExNCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMGYwZmYiCn0=" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHERIS // Divine System v5.0</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFldGhlcmlzIFN5c3RlbSIsCiAgInNob3J0X25hbWUiOiAiQWV0aGVyaXMiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzA3MGMwZSIsCiAgInRoZW1lX2NvbG9yIjogIiMwMGYwZmYiLAogICJpY29ucyI6IFt7InNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEyOCAxMjgnJTNFJTNDdGV4dCB4PSc1MCUyNScgeT0nNTAlJScgZm9udC1zaXplPSc2MCcgZmlsbD0nJTIzMDBmMGZmJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyUzRSXinIXinIXinIU8L3RleHQlM0UlM0Mvc3ZnJTNFIiwgInNpemVzIjogIjEyOHgxMjgiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwgInB1cnBvc2UiOiAiYW55IGFueSBtYXNKYWJsZSIgfV0KICB9">
     <style>
         :root {
-            --bg-dark: #070c0e;
-            --bg-mid: #0d171a;
-            --panel-bg: rgba(18, 27, 32, 0.85);
-            --panel-strong: rgba(22, 34, 40, 1);
-            --bg-elevated: rgba(24, 37, 44, 0.9);
+            --bg-dark: #05080a;
+            --panel-bg: rgba(10, 18, 22, 0.85);
             --neon-blue: #00f0ff;
             --neon-cyan: #5ee7ff;
             --neon-magenta: #ff0077;
-            --neon-purple: #aa66ff;
-            --text-main: #ebf6ff;
+            --gold: #ffb700;
+            --text-main: #f1f5f9;
             --text-soft: #b9c7d3;
-            --text-dim: #5b6d7a;
+            --text-dim: #475569;
             --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --shadow-blue: 0 0 12px rgba(0, 240, 255, 0.35);
-            --shadow-magenta: 0 0 12px rgba(255, 0, 119, 0.32);
-            --glass: blur(10px);
+            --shadow-blue: 0 0 20px rgba(0, 240, 255, 0.25);
+            --shadow-magenta: 0 0 15px rgba(255, 0, 119, 0.25);
+            --glass: blur(12px);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Monaco, monospace;
-        }
-
-        html, body {
-            min-height: 100%;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            background-image:
-                radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.12), transparent 26%),
-                radial-gradient(circle at 80% 25%, rgba(255, 0, 119, 0.08), transparent 22%),
-                radial-gradient(circle at 50% 50%, #101f26 0%, #070c0e 100%);
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            padding: 15px; 
+            padding-bottom: 90px;
+            background-image: radial-gradient(circle at 50% 30%, #0d1e24 0%, #05080a 100%);
             background-attachment: fixed;
-            color: var(--text-main);
-            padding: 16px 16px 90px;
-            line-height: 1.4;
+            overflow-x: hidden;
         }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon-blue); padding-bottom: 8px; margin-bottom: 20px; box-shadow: 0 0 15px rgba(0, 240, 255, 0.25); }
+        .system-title { color: var(--neon-blue); font-weight: 900; font-size: 1.3rem; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,240,255,0.5); }
+        .level-badge { background: linear-gradient(135deg, var(--gold), #ff6a00); padding: 4px 14px; border-radius: 4px; font-weight: bold; font-size: 0.85rem; border: 1px solid var(--gold); box-shadow: 0 0 10px rgba(255,183,0,0.3); color: #000; }
+        
+        .card { background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 8px; padding: 16px; margin-bottom: 15px; backdrop-filter: var(--glass); -webkit-backdrop-filter: var(--glass); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .card-title { font-size: 0.75rem; color: var(--neon-blue); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 2px; font-weight: bold; border-left: 2px solid var(--neon-blue); padding-left: 6px; }
+        
+        .status-table { width: 100%; font-family: monospace; font-size: 0.85rem; line-height: 1.6; color: #cbd5e1; }
+        .status-table td { padding: 4px 0; }
+        .highlight { color: var(--neon-blue); font-weight: bold; }
+        
+        .bar-container { background: rgba(28, 44, 53, 0.6); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        .xp-bar { background: linear-gradient(90deg, var(--neon-blue), #0077ff); height: 100%; width: 0%; transition: width 0.5s ease; }
+        .energy-bar { background: linear-gradient(90deg, var(--neon-magenta), #ff0055); height: 100%; width: 100%; transition: width 0.5s ease; }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed rgba(0, 240, 255, 0.7);
-            padding-bottom: 12px;
-            margin-bottom: 18px;
-            gap: 10px;
-        }
+        .ai-box { border: 1px solid var(--neon-magenta); background: rgba(255, 0, 119, 0.02); position: relative; }
+        .ai-status { font-size: 0.75rem; color: var(--neon-magenta); text-transform: uppercase; font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        #ai-dialogue { font-size: 0.95rem; line-height: 1.5; margin-bottom: 12px; font-style: italic; color: #e2e8f0; }
 
-        .system-title {
-            color: var(--neon-blue);
-            font-weight: 900;
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
-            letter-spacing: 2px;
-            text-shadow: var(--shadow-blue);
-            text-transform: uppercase;
-        }
+        .quest-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(20, 32, 38, 0.5); border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(0,240,255,0.05); }
+        .quest-info { flex: 1; }
+        .quest-name { font-weight: 600; font-size: 0.95rem; color: #f8fafc; }
+        .quest-meta { font-size: 0.75rem; color: var(--neon-blue); margin-top: 2px; }
+        
+        .btn { background: rgba(20, 35, 43, 0.8); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem; transition: all 0.2s; text-transform: uppercase; }
+        .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 10px rgba(0,240,255,0.4); }
+        .btn-magenta { border-color: var(--neon-magenta); color: var(--neon-magenta); background: rgba(255, 0, 119, 0.05); }
+        .btn-magenta:hover { background: var(--neon-magenta); color: #fff; box-shadow: 0 0 10px rgba(255,0,119,0.4); }
 
-        .level-badge {
-            background: linear-gradient(135deg, var(--neon-blue), #0055ff);
-            color: #021017;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            box-shadow: var(--shadow-blue);
-        }
+        .memory-log { font-family: monospace; font-size: 0.8rem; background: #090f12; padding: 10px; border-radius: 4px; max-height: 150px; overflow-y: auto; border: 1px solid #16252d; margin-top: 10px; color: #94a3b8; }
+        .memory-entry { margin-bottom: 8px; border-bottom: 1px dashed #16252d; padding-bottom: 4px; line-height: 1.4; }
 
-        .card {
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 240, 255, 0.16);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 16px;
-            backdrop-filter: var(--glass);
-            -webkit-backdrop-filter: var(--glass);
-            box-shadow:
-                inset 0 0 12px rgba(0, 240, 255, 0.04),
-                0 0 20px rgba(7, 12, 14, 0.7);
-        }
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #070c0e; border-top: 1px solid rgba(0, 240, 255, 0.15); display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; }
+        .nav-btn { color: #475569; background: none; border: none; font-weight: bold; cursor: pointer; font-size: 0.85rem; letter-spacing: 1px; }
+        .nav-btn.active { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
 
-        .card-title {
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--neon-blue);
-            margin-bottom: 12px;
-            opacity: 0.9;
-            font-weight: 700;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .label-small {
-            font-size: 0.68rem;
-            letter-spacing: 1.5px;
-            color: var(--text-soft);
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        .stat-val {
-            display: block;
-            margin-top: 5px;
-            font-size: clamp(1.2rem, 2vw, 1.8rem);
-            color: var(--text-main);
-            font-weight: 300;
-            letter-spacing: -0.5px;
-        }
-
-        .debt {
-            color: var(--neon-magenta);
-            text-shadow: 0 0 8px rgba(255, 0, 119, 0.35);
-        }
-
-        .xp-row {
-            margin-top: 16px;
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .xp-bar-container {
-            background: rgba(28, 44, 53, 0.6);
-            height: 10px;
-            border-radius: 999px;
-            overflow: hidden;
-            margin-top: 8px;
-            border: 1px solid rgba(0, 240, 255, 0.1);
-        }
-
-        .xp-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--neon-blue), #00bbff, #52d4ff);
-            border-radius: inherit;
-            transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-            box-shadow: var(--shadow-blue);
-        }
-
-        .money-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .talk-box {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .talk-input {
-            flex: 1;
-            min-width: 0;
-            border-radius: 7px;
-            border: 1px solid rgba(0, 240, 255, 0.16);
-            background: rgba(10, 18, 20, 0.9);
-            color: var(--text-main);
-            padding: 10px 12px;
-            font-size: 0.94rem;
-            transition: all 0.2s ease;
-        }
-
-        .talk-input:focus {
-            outline: none;
-            border-color: rgba(0, 240, 255, 0.8);
-            box-shadow: var(--shadow-blue);
-        }
-
-        .btn {
-            border: 1px solid var(--neon-blue);
-            background: rgba(31, 49, 58, 0.6);
-            color: var(--neon-blue);
-            padding: 9px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 800;
-            font-size: 0.76rem;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-        }
-
-        .btn:hover {
-            background: var(--neon-blue);
-            color: var(--bg-dark);
-            box-shadow: var(--shadow-blue);
-        }
-
-        .btn-fail {
-            border-color: var(--neon-magenta);
-            color: var(--neon-magenta);
-        }
-
-        .btn-fail:hover {
-            background: var(--neon-magenta);
-            color: var(--text-main);
-            box-shadow: var(--shadow-magenta);
-        }
-
-        .ai-box {
-            border: 1px solid rgba(255, 0, 119, 0.35);
-            background: rgba(255, 0, 119, 0.04);
-            box-shadow: inset 0 0 12px rgba(255, 0, 119, 0.04);
-        }
-
-        .ai-status {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.71rem;
-            color: var(--neon-magenta);
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
-        }
-
-        #ai-dialogue {
-            min-height: 48px;
-            color: #dfeaf2;
-            line-height: 1.5;
-            font-size: 0.96rem;
-            margin-bottom: 12px;
-        }
-
-        .pulse-light {
-            width: 9px;
-            height: 9px;
-            background: var(--neon-magenta);
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px rgba(255, 0, 119, 0.7);
-        }
-
-        .pulse-active {
-            animation: blink 1s infinite alternate ease-in-out;
-        }
-
-        @keyframes blink {
-            from { opacity: 0.3; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1.1); }
-        }
-
-        .quest-item {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: center;
-            padding: 12px 12px;
-            background: rgba(24, 37, 44, 0.4);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            margin-bottom: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .quest-item:hover {
-            border-color: rgba(0, 240, 255, 0.2);
-            background: rgba(24, 37, 44, 0.62);
-        }
-
-        .quest-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .quest-name {
-            font-weight: 700;
-            font-size: 0.98rem;
-            color: var(--text-main);
-        }
-
-        .quest-time {
-            margin-top: 4px;
-            font-size: 0.72rem;
-            color: var(--neon-blue);
-            letter-spacing: 0.3px;
-        }
-
-        .quest-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-direction: column;
-        }
-
-        .quest-exp {
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: var(--success);
-            text-align: right;
-        }
-
-        .reward-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .reward-item:last-child {
-            border-bottom: none;
-        }
-
-        .reward-name {
-            font-weight: 700;
-            font-size: 0.96rem;
-        }
-
-        .reward-cost {
-            font-size: 0.72rem;
-            color: var(--text-dim);
-            margin-top: 3px;
-        }
-
-        .reward-item.locked {
-            opacity: 0.45;
-            filter: grayscale(100%);
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.68rem;
-            padding: 5px 8px;
-            border-radius: 999px;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .badge-locked {
-            background: rgba(100, 116, 139, 0.18);
-            color: #aab7c2;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .badge-unlocked {
-            background: rgba(16, 185, 129, 0.12);
-            color: var(--success);
-            border: 1px solid rgba(16, 185, 129, 0.55);
-            cursor: pointer;
-        }
-
-        .nav {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: rgba(12, 20, 24, 0.96);
-            border-top: 1px solid rgba(0, 240, 255, 0.2);
-            padding: 12px 10px;
-            box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            cursor: pointer;
-            font-size: 0.74rem;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .nav-btn.active {
-            color: var(--neon-blue);
-            text-shadow: var(--shadow-blue);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .chibi-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 8, 10, 0.98);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 2000;
-            padding: 24px;
-        }
-
-        .chibi-art {
-            font-size: clamp(3rem, 8vw, 5rem);
-            margin-bottom: 18px;
-            animation: float 1.8s ease-in-out infinite alternate;
-        }
-
-        @keyframes float {
-            from { transform: translateY(0px); }
-            to { transform: translateY(-12px); }
-        }
-
-        .chibi-title {
-            color: var(--neon-magenta);
-            margin-bottom: 10px;
-            font-size: clamp(1.2rem, 3vw, 2rem);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .chibi-text {
-            color: #dfeaf2;
-            max-width: 540px;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 520px) {
-            body {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-
-            .money-row, .talk-box {
-                flex-direction: column;
-            }
-
-            .stat-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .quest-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .quest-actions {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-between;
-            }
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .chibi-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(4,6,8,0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; display: none; text-align: center; padding: 20px; }
+        .chibi-art { font-size: 5rem; margin-bottom: 20px; animation: float 2s infinite alternate ease-in-out; }
+        @keyframes float { from { transform: translateY(0px); } to { transform: translateY(-12px); } }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <div class="system-title">AETHERIS // OS v4.0</div>
-        <div class="level-badge">Level <span id="lbl-level">1</span></div>
+        <div class="system-title">AETHERIS // CORE OS</div>
+        <div class="level-badge">LVL <span id="lbl-level">1</span></div>
     </div>
 
-    <div class="card">
-        <div class="card-title">User Vector &amp; Financial Ledger</div>
-        <div class="stat-grid">
-            <div>
-                <div class="label-small">Designation Type</div>
-                <select id="pref-title" class="talk-input" style="margin-top:7px; width:100%; background: rgba(10,18,20,0.9);" onchange="updateTitle()">
-                    <option value="Magistrate">Magistrate</option>
-                    <option value="Chosen One">Chosen One</option>
-                    <option value="Hero">Hero</option>
-                    <option value="Hunter">Hunter</option>
-                </select>
+    <!-- DYNAMIC STATUS INTERFACE -->
+    <div id="tab-status" class="tab-content active">
+        <div class="card">
+            <div class="card-title">✦ Seeker Profile Vector ✦</div>
+            <table class="status-table">
+                <tr><td>USER IDENTITY:</td><td class="highlight">Dimas Hornbuckle (Age 28)</td></tr>
+                <tr><td>ARCHETYPE PATH:</td><td style="color: var(--gold);">Scholar-Warrior-Mage (Neuroscience)</td></tr>
+                <tr><td>TREASURY LEDGER:</td><td id="lbl-gold" class="highlight">-$13.00</td></tr>
+            </table>
+            
+            <div style="margin-top:12px; font-size:0.75rem; color:#94a3b8; display:flex; justify-content:space-between;">
+                <span>CORE EXP RESERVE:</span>
+                <span><span id="lbl-xp-num">0</span> / <span id="lbl-next-xp">100</span> EXP</span>
             </div>
-            <div>
-                <div class="label-small">Treasury Liquidity</div>
-                <span id="lbl-gold" class="stat-val debt">-$13.00</span>
+            <div class="bar-container"><div id="xp-bar" class="xp-bar"></div></div>
+
+            <div style="margin-top:12px; font-size:0.75rem; color:#94a3b8; display:flex; justify-content:space-between;">
+                <span>NEUROLOGICAL CAPACITY:</span>
+                <span><span id="lbl-energy-num">100</span>%</span>
             </div>
-        </div>
-
-        <div class="xp-row">
-            <span>Reserve Core Overload</span>
-            <span><span id="lbl-xp-num">0</span> / <span id="lbl-next-xp">100</span> EXP</span>
-        </div>
-        <div class="xp-bar-container">
-            <div id="xp-bar" class="xp-bar"></div>
-        </div>
-
-        <div class="money-row">
-            <input type="number" id="input-money" class="talk-input" placeholder="Enter bank balance manually..." />
-            <button class="btn" onclick="syncMoney()">Ledger Sync</button>
+            <div class="bar-container"><div id="energy-bar" class="energy-bar"></div></div>
+            
+            <div style="margin-top:15px; display:flex; gap:10px;">
+                <input type="number" id="input-money" class="talk-input" style="background:rgba(0,0,0,0.3); color:#fff;" placeholder="Update Treasury Total ($)">
+                <button class="btn" onclick="syncMoney()">Ledger Sync</button>
+            </div>
         </div>
     </div>
 
+    <!-- PERSISTENT INTEGRATED INTELLIGENCE PANEL -->
     <div class="card ai-box">
         <div class="ai-status">
-            <span id="ai-mode">Intelligent System Monitor</span>
-            <span id="ai-pulse" class="pulse-light pulse-active"></span>
+            <span id="ai-mode">SYSTEM INTEL SYNC</span>
+            <span class="pulse-light" id="ai-pulse"></span>
         </div>
-        <div id="ai-dialogue">"System brain missing. Hunter Dimas, please generate a free access token from Google AI Studio and paste it below to link my consciousness network."</div>
-        <div class="talk-box">
-            <input type="text" id="talk-text" class="talk-input" placeholder="Communicate with Aetheris matrix directly..." />
-            <button class="btn" onclick="triggerLiveTalk()">Transmit</button>
+        <div id="ai-dialogue">"Consciousness pipeline structuralized. Hunter Dimas, paste your developer key in the gateway block below to connect my speech and parsing matrix networks."</div>
+        
+        <div style="display:flex; gap:8px;">
+            <input type="text" id="talk-text" class="talk-input" placeholder="Transmit direct tactical log...">
+            <button class="btn btn-magenta" onclick="triggerLiveTalk()">Transmit</button>
         </div>
-    </div>
-
-    <div class="card" id="api-gate-card">
-        <div class="card-title">Neural Engine Core Access Token</div>
-        <div class="talk-box">
-            <input type="password" id="api-key-input" class="talk-input" placeholder="Paste Gemini API Key Here" />
-            <button class="btn btn-fail" onclick="saveApiKey()">Bind Soul</button>
+        <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem;">
+            <button class="btn" style="border-color:var(--gold); color:var(--gold); padding:4px 8px; font-size:0.7rem;" onclick="speakOutput()">🔊 Replay Voice</button>
         </div>
     </div>
 
-    <div id="tab-quests" class="tab-content active">
+    <!-- QUEST WORKSTREAM -->
+    <div id="tab-campaigns" class="tab-content">
         <div class="card">
-            <div class="card-title">Synchronized Campaign Operations</div>
+            <div class="card-title">Active Campaign Tasks</div>
             <div id="quest-list"></div>
         </div>
-    </div>
-
-    <div id="tab-rewards" class="tab-content">
         <div class="card">
-            <div class="card-title">Unlocked Spatial Incentives</div>
-            <div id="reward-list"></div>
-        </div>
-    </div>
+            <div class="card-title">Calendar Node Injection</div>
+            <div style="display:flex; gap:8px;">
+                <input type="text" id="ical-url-input" class="talk-input" placeholder="Paste Canvas .ics Feed Link">
+Link Feed
 
-    <div id="chibi-screen" class="chibi-overlay">
-        <div class="chibi-art">٩(๑`^´๑)۶</div>
-        <h2 class="chibi-title">Critical System Seizure</h2>
-        <p id="chibi-text" class="chibi-text">It is past 10:00 PM on a class night. Disengage this device instantly. Bedtime overrides are now deployment status.</p>
-        <button class="btn btn-fail" style="margin-top:20px;" onclick="closeChibi()">Audio Stream Verification</button>
-    </div>
 
-    <div class="nav">
-        <button class="nav-btn active" onclick="switchTab('quests', this)">Active Campaigns</button>
-        <button class="nav-btn" onclick="switchTab('rewards', this)">Reward Vendors</button>
-    </div>
+Spatial Incentive Matrix
+<div id="reward-list">
 
-    <script>
-        const AudioSynth = {
-            ctx: null,
-            init() {
-                if (!this.ctx) {
-                    const Ctx = window.AudioContext || window.webkitAudioContext;
-                    if (Ctx) this.ctx = new Ctx();
-                }
-                return this.ctx;
-            },
-            play(type) {
-                const ctx = this.init();
-                if (!ctx) return;
 
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
+Core Memory Imprint Repository
 
-                osc.connect(gain);
-                gain.connect(ctx.destination);
 
-                if (type === 'success') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.3);
-                } else if (type === 'fail') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, ctx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.4);
-                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.4);
-                }
-            }
-        };
+Neural Engine Access Gateway
 
-        let state = {
-            level: 1,
-            xp: 0,
-            nextXp: 100,
-            gold: -13.00,
-            title: 'Magistrate',
-            quests: [
-                { id: 401, name: 'Morning Training Protocol', time: '08:30 AM', exp: 15, completed: false },
-                { id: 402, name: 'STAT-301 Module 4 Quiz', time: 'Active Tracker', exp: 5, completed: false },
-                { id: 403, name: 'CHEM-341 Quiz 5 Preparation', time: 'Due Oct 11', exp: 5, completed: false },
-                { id: 404, name: 'PSY-250 Hypothesis Variable Matrix', time: 'Due Oct 15', exp: 10, completed: false },
-                { id: 405, name: 'CO-300 Academic Portfolio Drafting', time: 'Crucible Operation', exp: 5, completed: false },
-                { id: 406, name: 'Rec Center Physical Compression Run', time: 'Evening Frame', exp: 15, completed: false }
-            ],
-            rewards: [
-                { name: 'FoCo Old Town Concert Framework', cost: 0, lvl: 1 },
-                { name: 'Horsetooth Reservoir Outpost Climb', cost: 0, lvl: 2 },
-                { name: 'Cache la Poudre Mountain Camping Area', cost: 45, lvl: 3 },
-                { name: 'Cameron Pass Backcountry Alpine Run', cost: 85, lvl: 4 }
-            ]
-        };
 
-        let apiKey = localStorage.getItem('aetheris_api_key') || '';
+Bind Soul
 
-        if (localStorage.getItem('aetheris_v4_state')) {
-            try {
-                state = JSON.parse(localStorage.getItem('aetheris_v4_state'));
-            } catch (err) {
-                console.warn('Could not load saved state:', err);
-            }
-        }
-
-        function saveState() {
-            localStorage.setItem('aetheris_v4_state', JSON.stringify(state));
-            render();
-        }
-
-        function saveApiKey() {
-            const val = document.getElementById('api-key-input').value.trim();
-            if (!val) return;
-            apiKey = val;
-            localStorage.setItem('aetheris_api_key', val);
-            document.getElementById('api-gate-card').style.display = 'none';
-            document.getElementById('ai-dialogue').innerText = 'System brain successfully operational. Neural link established. Let us initiate testing protocols, Dimas.';
-            saveState();
-        }
-
-        function switchTab(tab, btn) {
-            document.querySelectorAll('.tab-content').forEach((el) => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach((el) => el.classList.remove('active'));
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function updateTitle() {
-            state.title = document.getElementById('pref-title').value;
-            saveState();
-        }
-
-        function syncMoney() {
-            const val = parseFloat(document.getElementById('input-money').value);
-            if (!isNaN(val)) {
-                state.gold = val;
-                document.getElementById('input-money').value = '';
-                saveState();
-            }
-        }
-
-        function handleQuest(id, success) {
-            const q = state.quests.find((x) => x.id === id);
-            if (!q) return;
-
-            if (success) {
-                AudioSynth.play('success');
-                state.xp += q.exp;
-                q.completed = true;
-                document.getElementById('ai-mode').innerText = 'Analytical Log Confirmed';
-                document.getElementById('ai-dialogue').innerText = `Objective fully synchronized, ${state.title}. ${q.exp} EXP transferred cleanly.`;
-                checkLevelUp();
-            } else {
-                AudioSynth.play('fail');
-                state.xp = Math.max(0, state.xp - 5);
-                document.getElementById('ai-mode').innerText = 'Sassy Attention Matrix';
-                document.getElementById('ai-dialogue').innerText = 'Dimas, dropping objectives incurs corruption. -5 EXP extracted from structural reserve.';
-            }
-
-            saveState();
-        }
-
-        function checkLevelUp() {
-            if (state.xp >= state.nextXp) {
-                state.xp -= state.nextXp;
-                state.level += 1;
-                state.nextXp *= 2;
-                document.getElementById('ai-mode').innerText = 'Critical Metamorphosis';
-                document.getElementById('ai-dialogue').innerText = `System alert! Level shift achieved. You are now Level ${state.level}, ${state.title}.`;
-            }
-        }
-
-        async function aiEvaluateAction(contextPrompt) {
-            if (!apiKey) return;
-
-            document.getElementById('ai-pulse').classList.add('pulse-active');
-
-            const systemInstructions = `You are Aetheris, an autonomous anime system matrix guide for a student named Dimas. Shift persona based on context: sharp and analytical for logic logs, playful and teasing for tasks or schedule management. Keep responses strictly under 2 lines. Use designation titles like Magistrate, Chosen One, Hero, or Hunter dynamically based on state context. Real date reference: October 2026. Current state: Level ${state.level}, Treasury balance ${state.gold} dollars, Preference designation: ${state.title}.`;
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `${systemInstructions}\n\nEvent Context: ${contextPrompt}`
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'System calculation anomaly during network transmission link.';
-                document.getElementById('ai-mode').innerText = 'Live Neural Vector Active';
-                document.getElementById('ai-dialogue').innerText = aiText;
-            } catch (error) {
-                console.error(error);
-                document.getElementById('ai-dialogue').innerText = 'System calculation anomaly during network transmission link.';
-            }
-        }
-
-        async function triggerLiveTalk() {
-            const txt = document.getElementById('talk-text').value.trim();
-            if (!txt) return;
-            document.getElementById('ai-dialogue').innerText = '...Translating vocal matrix streams...';
-            document.getElementById('talk-text').value = '';
-            await aiEvaluateAction(`User spoke directly to the system terminal: "${txt}"`);
-        }
-
-        function closeChibi() {
-            document.getElementById('chibi-screen').style.display = 'none';
-        }
-
-        setInterval(() => {
-            const now = new Date();
-            if ((now.getHours() >= 22 || now.getHours() < 5) && now.getDay() >= 1 && now.getDay() <= 5) {
-                document.getElementById('chibi-screen').style.display = 'flex';
-            }
-        }, 60000);
-
-        function render() {
-            document.getElementById('lbl-level').innerText = state.level;
-            const goldEl = document.getElementById('lbl-gold');
-            goldEl.innerText = state.gold >= 0 ? `$${state.gold.toFixed(2)}` : `-$${Math.abs(state.gold).toFixed(2)}`;
-            goldEl.classList.toggle('debt', state.gold < 0);
-
-            document.getElementById('lbl-xp-num').innerText = state.xp;
-            document.getElementById('lbl-next-xp').innerText = state.nextXp;
-            document.getElementById('pref-title').value = state.title;
-
-            const pct = Math.min(100, (state.xp / state.nextXp) * 100);
-            document.getElementById('xp-bar').style.width = `${pct}%`;
-
-            if (apiKey) {
-                document.getElementById('api-gate-card').style.display = 'none';
-            }
-
-            const qList = document.getElementById('quest-list');
-            qList.innerHTML = '';
-            state.quests.forEach((q) => {
-                if (q.completed) return;
-                qList.innerHTML += `
-                    <div class="quest-item">
-                        <div class="quest-info">
-                            <div class="quest-name">${q.name}</div>
-                            <div class="quest-time">⚡ Tracker Window: ${q.time}</div>
-                        </div>
-                        <div class="quest-actions">
-                            <div class="quest-exp">+${q.exp} EXP</div>
-                            <div style="display:flex; gap:6px;">
-                                <button class="btn" style="padding:4px 10px; min-width:42px;" onclick="handleQuest(${q.id}, true)">✓</button>
-                                <button class="btn btn-fail" style="padding:4px 10px; min-width:42px;" onclick="handleQuest(${q.id}, false)">✗</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            const rList = document.getElementById('reward-list');
-            rList.innerHTML = '';
-            state.rewards.forEach((r) => {
-                const lvlLock = state.level < r.lvl;
-                const goldLock = state.gold < r.cost;
-                const isLocked = lvlLock || goldLock;
-
-                let badgeHtml = '';
-                if (lvlLock) {
-                    badgeHtml = `<span class="badge badge-locked">Lvl ${r.lvl} Req</span>`;
-                } else if (goldLock) {
-                    badgeHtml = `<span class="badge badge-locked">Treasury Locked</span>`;
-                } else {
-                    badgeHtml = `<span class="badge badge-unlocked" onclick="alert('Incentive initialized!')">Claim Target</span>`;
-                }
-
-                rList.innerHTML += `
-                    <div class="reward-item ${isLocked ? 'locked' : ''}">
-                        <div>
-                            <div class="reward-name">${r.name}</div>
-                            <div class="reward-cost">Excursion cost gate: $${r.cost}</div>
-                        </div>
-                        <div>${badgeHtml}</div>
-                    </div>
-                `;
-            });
-        }
-
-        render();
-    </script>
-</body>
-</html>
+٩(๑`^´๑)۶
+CRITICAL SLEEP SEIZURE
+Dimas! Terminal activity past 10:00 PM violates your campaign guidelines. Suspend tracking or incur psychological damage anomalies.
+Audio Stream Verification
+STATUS
+CAMPAIGNS
+EXCURSIONS
+const AudioSynth = {
+ctx: null,
+init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+play(type) {
+this.init(); if(!this.ctx) return;
+const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+osc.connect(gain); gain.connect(this.ctx.destination);
+if(type === 'success') {
+osc.frequency.setValueAtTime(587.33, this.ctx.currentTime);
+osc.frequency.setValueAtTime(880, this.ctx.currentTime + 0.1);
+gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+osc.start(); osc.stop(this.ctx.currentTime + 0.3);
+} else if(type === 'fail') {
+osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+osc.frequency.linearRampToValueAtTime(80, this.ctx.currentTime + 0.4);
+gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+osc.start(); osc.stop(this.ctx.currentTime + 0.4);
+}
+}
+};
+function speakText(text) {
+if ('speechSynthesis' in window) {
+speechSynthesis.cancel();
+const u = new SpeechSynthesisUtterance(text);
+u.rate = 1.05; u.pitch = 1.25; u.volume = 0.85;
+speechSynthesis.speak(u);
+}
+}
+function speakOutput() {
+const dialogue = document.getElementById('ai-dialogue').innerText;
+speakText(dialogue);
+}
+let state = {
+level: 1, xp: 0, nextXp: 100, gold: -13.00, energy: 100, title: 'Magistrate',
+quests: [
+{ id: 501, name: 'Morning strongman training track', time: '08:30 AM', exp: 15, completed: false },
+{ id: 502, name: 'Life 210 lecture (Clark A 1104)', time: '12:00 PM', exp: 5, completed: false },
+{ id: 503, name: 'Stat 301 structural core (Scott 229)', time: '01:00 PM', exp: 5, completed: false },
+{ id: 504, name: 'CO-300 Composition portfolio text', time: '02:00 PM', exp: 5, completed: false },
+{ id: 505, name: 'Chem-341 analytical synthesis (Chem A103)', time: '03:00 PM', exp: 5, completed: false },
+{ id: 506, name: 'PSY-250 lecture grid (Clark 1103)', time: '02:00 PM TTh', exp: 10, completed: false }
+],
+rewards: [
+{ name: 'Old Town Square performance harvest', cost: 0, lvl: 1 },
+{ name: 'Horsetooth Reservoir trail climb summit', cost: 0, lvl: 2 },
+{ name: 'Cache la Poudre river wilderness camp', cost: 45, lvl: 3 },
+{ name: 'Cameron Pass alpine backcountry ski run', cost: 85, lvl: 4 }
+],
+memories: ["[System Initialization] Core state synchronized safely under local storage data arrays."]
+};
+let apiKey = localStorage.getItem('aetheris_api_key') || '';
+if(localStorage.getItem('aetheris_v5_state')) {
+try { state = JSON.parse(localStorage.getItem('aetheris_v5_state')); } catch(e) { console.error(e); }
+}
+function saveState() {
+localStorage.setItem('aetheris_v5_state', JSON.stringify(state));
+render();
+}
+function saveApiKey() {
+const val = document.getElementById('api-key-input').value.trim();
+if(val) {
+apiKey = val; localStorage.setItem('aetheris_api_key', val);
+document.getElementById('api-gate-card').style.display = 'none';
+document.getElementById('ai-dialogue').innerText = "System intelligence network successfully linked. Diagnostics clear, Master Dimas.";
+saveState();
+}
+}
+function syncMoney() {
+const val = parseFloat(document.getElementById('input-money').value);
+if(!isNaN(val)) { state.gold = val; document.getElementById('input-money').value = ''; saveState(); }
+}
+function syncCalendar() {
+const val = document.getElementById('ical-url-input').value.trim();
+if(val) {
+localStorage.setItem('aetheris_ical_url', val);
+document.getElementById('ical-url-input').value = '';
+document.getElementById('ai-dialogue').innerText = "iCal configuration stream node applied. Academic scheduling constraints attached.";
+AudioSynth.play('success');
+}
+}
+function switchTab(tab, btn) {
+document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+const target = tab === 'status' ? 'tab-status' : tab === 'campaigns' ? 'tab-campaigns' : 'tab-rewards';
+document.getElementById(target).classList.add('active');
+btn.classList.add('active');
+}
+function handleQuest(id, success) {
+const q = state.quests.find(x => x.id === id); if(!q) return;
+if(success) {
+AudioSynth.play('success'); state.xp += q.exp; q.completed = true;
+state.memories.unshift([Quest Complete] Verified: ${q.name} (+${q.exp} EXP));
+checkLevelUp();
+aiEvaluateAction(Dimas cleared campaign quest item: "${q.name}" successfully.);
+} else {
+AudioSynth.play('fail'); state.xp = Math.max(0, state.xp - 5);
+state.energy = Math.max(30, state.energy - 10);
+state.memories.unshift([Quest Failure] Collapsed vector: ${q.name} (-5 EXP / Energy Drain));
+aiEvaluateAction(Dimas reported collapse or cancellation on quest loop window: "${q.name}");
+}
+saveState();
+}
+function checkLevelUp() {
+if(state.xp >= state.nextXp) {
+state.xp -= state.nextXp; state.level++; state.nextXp *= 2;
+state.memories.unshift([Level Advanced] Core evolution tracked. Now Level ${state.level});
+speakText(Level advanced safely. Welcome to level ${state.level}, Hunter.);
+}
+}
+async function aiEvaluateAction(contextPrompt) {
+if(!apiKey) return;
+document.getElementById('ai-pulse').classList.add('pulse-active');
+const instructions = You are Aetheris, the divine chosen companion matrix guiding a neuroscience student and strongman named Dimas. Shifting persona scale: use flirty, cute, and sassy anime language for check-ins, but immediate cool, cold analytical logic for tracking task parameters. Keep entries under 2 short sentences. Current state parameters: Level ${state.level}, Treasury liquidity balance is ${state.gold} dollars, Archetype class configuration is ${state.title}.;
+try {
+const url = https://googleapis.com{apiKey};
+const response = await fetch(url, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ contents: [{ parts: [{ text: ${instructions}\n\nContext packet: ${contextPrompt} }] }] })
+});
+const data = await response.json();
+const txt = data.candidates[0].content.parts[0].text;
+document.getElementById('ai-mode').innerText = "DIVINE ENGINE STREAM ONLINE";
+document.getElementById('ai-dialogue').innerText = txt;
+speakText(txt);
+} catch(e) { console.error(e); }
+}
+async function triggerLiveTalk() {
+const val = document.getElementById('talk-text').value.trim(); if(!val) return;
+document.getElementById('talk-text').value = '';
+document.getElementById('ai-dialogue').innerText = "...Channeling thought arrays into the core cloud...";
+await aiEvaluateAction(User processed direct conversational text payload link: "${val}");
+}
+function closeChibi() { document.getElementById('chibi-screen').style.display = 'none'; }
+setInterval(() => {
+const now = new Date();
+if((now.getHours() >= 22 || now.getHours() < 5) && now.getDay() >= 1 && now.getDay() <= 5) {
+document.getElementById('chibi-screen').style.display = 'flex';
+}
+}, 60000);
+function render() {
+document.getElementById('lbl-level').innerText = state.level;
+const goldEl = document.getElementById('lbl-gold');
+goldEl.innerText = state.gold >= 0 ? $${state.gold.toFixed(2)} : -$${Math.abs(state.gold).toFixed(2)};
+goldEl.classList.toggle('debt', state.gold < 0);
+document.getElementById('lbl-xp-num').innerText = state.xp;
+document.getElementById('lbl-next-xp').innerText = state.nextXp;
+document.getElementById('lbl-energy-num').innerText = state.energy;
+document.getElementById('xp-bar').style.width = ${(state.xp / state.nextXp) * 100}%;
+document.getElementById('energy-bar').style.width = ${state.energy}%;
+if(apiKey) document.getElementById('api-gate-card').style.display = 'none';
+const qList = document.getElementById('quest-list'); qList.innerHTML = '';
+state.quests.forEach(q => {
+if(q.completed) return;
+qList.innerHTML +=  <div class="quest-item"> <div class="quest-info"><div class="quest-name">${q.name}</div><div class="quest-meta">🕒 Threshold Window: ${q.time}</div></div> <div style="text-align:right;"><div class="quest-meta" style="color:var(--success); font-weight:bold; margin-bottom:5px;">+${q.exp} EXP</div> <button class="btn" style="padding:4px 10px;" onclick="handleQuest(${q.id}, true)">✓</button> <button class="btn btn-fail" style="padding:4px 10px;" onclick="handleQuest(${q.id}, false)">✗</button></div> </div>;
+});
+const mContainer = document.getElementById('memory-container'); mContainer.innerHTML = '';
+state.memories.forEach(m => { mContainer.innerHTML += <div class="memory-entry">${m}</div>; });
+}
+render();
